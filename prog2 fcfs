@@ -1,0 +1,47 @@
+#include<stdio.h> // printf()
+#include<stdlib.h> // exit()
+#include<sys/types.h> // pid_t
+#include<sys/wait.h> // wait()
+#include<unistd.h> // fork
+int main(int argc, char **argv)
+{
+int n,bt[20],wt[20],tat[20],i,j;
+float avwt=0,avtat=0; // use float variables for averages
+printf("Enter total number of processes(maximum 20): ");
+while(scanf("%d",&n)!=1 || n<1 || n>20) // check the return value of scanf() and validate the input
+{
+printf("Invalid input. Please enter a positive integer between 1 and 20.\n");
+while(getchar()!='\n'); // clear the input buffer
+}
+printf("\nEnter Process Burst Time:\n");
+for(i=0;i<n;i++)
+{
+printf("P[%d]: ",i+1);
+while(scanf("%d",&bt[i])!=1 || bt[i]<0) // check the return value of scanf() and validate the input
+{
+printf("Invalid input. Please enter a non-negative integer.\n");
+while(getchar()!='\n'); // clear the input buffer
+}
+}
+wt[0]=0;
+for(i=1;i<n;i++)
+{
+wt[i]=0;
+for(j=0;j<i;j++)
+wt[i]+=bt[j];
+}
+printf("\nProcess\t\tBurst Time\tWaiting Time\tTurnaround Time");
+//calculating turnaround time
+for(i=0;i<n;i++)
+{
+tat[i]=bt[i]+wt[i];
+avwt+=wt[i];
+avtat+=tat[i];
+printf("\nP[%d]\t\t%d\t\t%d\t\t%d",i+1,bt[i],wt[i],tat[i]);
+}
+avwt/=n; // use n instead of i
+avtat/=n; // use n instead of i
+printf("\n\nAverage Waiting Time:%.2f",avwt); // use %.2f to print two decimal places
+printf("\nAverage Turnaround Time:%.2f",avtat); // use %.2f to print two decimal places
+return 0;
+}
