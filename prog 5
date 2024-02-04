@@ -1,0 +1,72 @@
+#include<stdio.h> // printf()
+#include<stdlib.h> // exit()
+#include<sys/types.h> // pid_t
+#include<sys/wait.h> // wait()
+#include<unistd.h> // fork
+int main(int argc, char **argv)
+{
+int fragments[10], blocks[10], files[10];
+int m, n, number_of_blocks, number_of_files, temp, top = 0;
+static int block_arr[10], file_arr[10];
+printf("\nEnter the Total Number of Blocks:\t");
+while(scanf("%d",&number_of_blocks)!=1 || number_of_blocks<1) // check the return value of scanf() and validate the input
+{
+printf("Invalid input. Please enter a positive integer.\n");
+while(getchar()!='\n'); // clear the input buffer
+}
+printf("Enter the Total Number of Files:\t");
+while(scanf("%d",&number_of_files)!=1 || number_of_files<1) // check the return value of scanf() and validate the input
+{
+printf("Invalid input. Please enter a positive integer.\n");
+while(getchar()!='\n'); // clear the input buffer
+}
+printf("\nEnter the Size of the Blocks:\n");
+for(m = 0; m < number_of_blocks; m++)
+{
+printf("Block No.[%d]:\t", m + 1);
+while(scanf("%d", &blocks[m])!=1 || blocks[m]<0) // check the return value of scanf() and validate the input
+{
+printf("Invalid input. Please enter a non-negative integer.\n");
+while(getchar()!='\n'); // clear the input buffer
+}
+}
+printf("Enter the Size of the Files:\n");
+for(m = 0; m < number_of_files; m++)
+{
+printf("File No.[%d]:\t", m + 1);
+while(scanf("%d", &files[m])!=1 || files[m]<0) // check the return value of scanf() and validate the input
+{
+printf("Invalid input. Please enter a non-negative integer.\n");
+while(getchar()!='\n'); // clear the input buffer
+}
+}
+for(m = 0; m < number_of_files; m++)
+{
+for(n = 0; n < number_of_blocks; n++)
+{
+if(block_arr[n] != 1)
+{
+temp = blocks[n] - files[m];
+if(temp >= 0)
+{
+if(top < temp)
+{
+file_arr[m] = n;
+top = temp;
+}
+}
+}
+fragments[m] = top;
+block_arr[file_arr[m]] = 1;
+top = 0;
+}
+}
+printf("\nFile Number\tFile Size\tBlock Number\tBlock Size\tFragment");
+for(m = 0; m < number_of_files; m++)
+{
+printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d", m, files[m], file_arr[m], blocks[file_arr[m]],
+fragments[m]);
+}
+printf("\n");
+return 0;
+}
