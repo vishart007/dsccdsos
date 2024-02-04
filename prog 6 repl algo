@@ -1,0 +1,56 @@
+#include<stdio.h> // printf()
+#include<stdlib.h> // exit()
+#include<sys/types.h> // pid_t
+#include<sys/wait.h> // wait()
+#include<unistd.h> // fork
+int main(int argc, char **argv)
+{
+int i,j,n,a[50],frame[10],no,k,avail,count=0;
+printf("\n ENTER THE NUMBER OF PAGES:\n");
+scanf("%d",&n);
+printf("\n ENTER THE PAGE NUMBER :\n");
+for(i=1;i<=n;i++)
+{
+scanf("%d",&a[i]);
+}
+printf("\n ENTER THE NUMBER OF FRAMES :");
+scanf("%d",&no);
+for(i=0;i<no;i++)
+{
+frame[i]= -1;
+}
+j=0;
+printf("\tref string\t page frames\n");
+
+for(i=1;i<=n;i++)
+{
+printf("%d\t\t",a[i]); // print the page number
+avail=0; // initialize the avail variable to 0
+k=0; // initialize the k variable to 0
+if(frame[k]==a[i]) // check if the page is already in the frame
+{
+avail=1; // set the avail variable to 1
+}
+for(k=0;k<no;k++) // loop through the frames
+{
+if(frame[k]==a[i]) // check if the page is already in the frame
+{
+avail=1; // set the avail variable to 1
+break; // break the loop
+}
+}
+if (avail==0) // if the page is not in the frame
+{
+frame[j]=a[i]; // replace the frame with the page
+j=(j+1)%no; // increment the frame index in a circular fashion
+count++; // increment the page fault count
+}
+for(k=0;k<no;k++) // loop through the frames
+{
+printf("%d\t",frame[k]); // print the frame content
+}
+printf("\n"); // print a newline
+}
+printf("\nPage Fault Is %d\n",count); // print the page fault count
+return 0;
+}
